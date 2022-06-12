@@ -1,1 +1,11 @@
-# angular-intro
+# Intro to Angular Project
+
+| Branch  | Description  |
+|---|---|
+|  Class 0 |   |
+|  Class 1 |   |
+|  Class 2 |   |
+|  Class 3 |   |
+|  Class 4 |   |
+|  Class 5 |   |
+|  Class 6 |   |
