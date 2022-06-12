@@ -1,6 +1,6 @@
 # Class 2 - Intro to Typescript
 
-### Project Overview
+### Class Overview
 - Discuss Why Typescript over Javascript
 - Visit the Typescript Playground
 - Create First Class
