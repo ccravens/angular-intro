@@ -1,4 +1,4 @@
-# Step 0 - Install Angular CLI and Create Project
+# Class 0 - Install Angular CLI and Create Project
 
 ### Install Latest Version of NodeJS
 https://nodejs.org/en/download/
@@ -10,5 +10,12 @@ npm install -g @angular/cli@latest
 
 ### Create New Project
 ```aidl
-ng new
+ng new track-my-shipment
 ```
+
+### Project Requirements
+- Web-Based Graphical User Interface (Angular)
+- Communicate with Back-End Service
+- Authentication with Keycloak
+- Role-based Access Control
+- Authentication with Back-End Service (JWT)
