@@ -1,4 +1,4 @@
-# Step 0 - Install or Upgrade Angular
+# Step 0 - Install Angular CLI and Create Project
 
 ### Install Latest Version of NodeJS
 https://nodejs.org/en/download/
