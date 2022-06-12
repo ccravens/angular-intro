@@ -1,8 +1,12 @@
 # Class 1 - Angular Project Overview
 
-### Project Overview
+### Class Overview
 - Review Project Files
 - Review Package and Project Management
+- Review Configuration Files
+- Review Source Code Files
+- Review Angular Testing
+- Run Angular Test
 
 ### Files Created
 ```shell
@@ -105,7 +109,7 @@ src/app/app-routing.module.ts
 src/app/app.component.spec.ts
 ```
 
-### Run Angular Test
+### Run Angular Tests
 ```shell
 $ ng test
 ```
