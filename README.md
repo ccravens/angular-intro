@@ -1,4 +1,4 @@
-# Class 1 - Intro to Typescript and Angular Development
+# Class 1 - Angular Project Overview
 
 ### Project Overview
 - Review Project Files
