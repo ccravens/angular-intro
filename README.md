@@ -78,6 +78,10 @@ src/app/app.component.html
 <li><a class="nav-link" routerLink="login">Login</a></li>
 ```
 
+```shell
+Review differences between href (page reload by browser) and routerLink (no page reload).
+```
+
 ### Add Bootstrap
 ####Legacy Peer Deps
 ```shell
