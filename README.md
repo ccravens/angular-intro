@@ -42,7 +42,7 @@ src/app/app.component.scss
 
 ### Create Login Component
 ```shell
-$ ng generate component login
+$ ng generate component components/login
 ```
 ####Check Files Added
 ```shell
@@ -103,7 +103,7 @@ node_modules/bootstrap
 ###2-Way Data Binding - Infamous TODO List
 ####Create Items Model to Hold Items
 ```shell
-src/app/login/login.component.ts
+src/app/components/login/login.component.ts
 ```
 ```typescript
 export class LoginComponent implements OnInit {
@@ -117,7 +117,7 @@ export class LoginComponent implements OnInit {
 
 ####Create Dynamic List
 ```shell
-src/app/login/login.component.html
+src/app/components/login/login.component.html
 ```
 ```html
 <ul>
@@ -127,7 +127,7 @@ src/app/login/login.component.html
 
 ####Create Input Form and Button
 ```shell
-src/app/login/login.component.html
+src/app/components/login/login.component.html
 ```
 ```html
 <input type="text">
@@ -136,7 +136,7 @@ src/app/login/login.component.html
 
 ####Create Model for New Item
 ```shell
-src/app/login/login.component.ts
+src/app/components/login/login.component.ts
 ```
 ```typescript
 export class LoginComponent implements OnInit {
@@ -146,7 +146,7 @@ export class LoginComponent implements OnInit {
 
 ####Create Data Binding
 ```shell
-src/app/login/login.component.html
+src/app/components/login/login.component.html
 ```
 ```html
 <input type="text" [(ngModel)]="item">
@@ -168,7 +168,7 @@ imports: [
 
 ####Create Add Item Event Handler
 ```shell
-src/app/login/login.component.ts
+src/app/components/login/login.component.ts
 ```
 ```typescript
 addItem() {
@@ -178,7 +178,7 @@ addItem() {
 
 ####Add Click Event to Button
 ```shell
-src/app/login/login.component.html
+src/app/components/login/login.component.html
 ```
 ```html
 <button (click)="addItem()">Add Item</button>
@@ -187,7 +187,7 @@ src/app/login/login.component.html
 ###How Would We Remove Item?
 ####Create Button
 ```shell
-src/app/login/login.component.html
+src/app/components/login/login.component.html
 ```
 ```html
 <button>Remove Item</button>
@@ -195,7 +195,7 @@ src/app/login/login.component.html
 
 ####Create Click Event Handler
 ```shell
-src/app/login/login.component.ts
+src/app/components/login/login.component.ts
 ```
 ```typescript
 removeItem() {
@@ -205,7 +205,7 @@ removeItem() {
 
 ####Add Click Event to Button
 ```shell
-src/app/login/login.component.html
+src/app/components/login/login.component.html
 ```
 ```html
 <button (click)="removeItem()">Remove Item</button>
