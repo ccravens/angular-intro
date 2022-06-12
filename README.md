@@ -1,11 +1,14 @@
-# Intro to Angular Project
+# Step 0 - Install or Upgrade Angular
 
-| Branch  | Description  |
-|---|---|
-|  Class 0 |   |
-|  Class 1 |   |
-|  Class 2 |   |
-|  Class 3 |   |
-|  Class 4 |   |
-|  Class 5 |   |
-|  Class 6 |   |
+### Install Latest Version of NodeJS
+https://nodejs.org/en/download/
+
+### Install / Upgrade Angular CLI
+```aidl
+npm install -g @angular/cli@latest
+```
+
+### Create New Project
+```aidl
+ng new
+```
