@@ -99,3 +99,114 @@ $ ng add @ng-bootstrap/ng-bootstrap
 package.json
 node_modules/bootstrap
 ```
+
+###2-Way Data Binding - Infamous TODO List
+####Create Items Model to Hold Items
+```shell
+src/app/login/login.component.ts
+```
+```typescript
+export class LoginComponent implements OnInit {
+    items: string[] = ['This', 'That', 'The Other'];
+
+    constructor() {}
+
+    ngOnInit(): void {}
+}
+```
+
+####Create Dynamic List
+```shell
+src/app/login/login.component.html
+```
+```html
+<ul>
+    <li *ngFor="let item of items">{{ item }}</li>
+</ul>
+```
+
+####Create Input Form and Button
+```shell
+src/app/login/login.component.html
+```
+```html
+<input type="text">
+<button>Add Item</button>
+```
+
+####Create Model for New Item
+```shell
+src/app/login/login.component.ts
+```
+```typescript
+export class LoginComponent implements OnInit {
+    items: string[] = ['This', 'That', 'The Other'];
+    item: string = '';
+```
+
+####Create Data Binding
+```shell
+src/app/login/login.component.html
+```
+```html
+<input type="text" [(ngModel)]="item">
+```
+
+####Add FormsModule to AppModule
+```shell
+src/app/app.module.ts
+```
+```typescript
+imports: [
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    CommonModule,
+    FormsModule,
+]
+```
+
+####Create Add Item Event Handler
+```shell
+src/app/login/login.component.ts
+```
+```typescript
+addItem(item: string) {
+    this.items.push(item);
+}
+```
+
+####Add Click Event to Button
+```shell
+src/app/login/login.component.html
+```
+```html
+<button (click)="addItem()">Add Item</button>
+```
+
+###How Would We Remove Item?
+####Create Button
+```shell
+src/app/login/login.component.html
+```
+```html
+<button>Remove Item</button>
+```
+
+####Create Click Event Handler
+```shell
+src/app/login/login.component.ts
+```
+```typescript
+removeItem() {
+  this.items.pop();
+}
+```
+
+####Add Click Event to Button
+```shell
+src/app/login/login.component.html
+```
+```html
+<button (click)="removeItem()">Remove Item</button>
+```
