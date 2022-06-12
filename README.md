@@ -171,8 +171,8 @@ imports: [
 src/app/login/login.component.ts
 ```
 ```typescript
-addItem(item: string) {
-    this.items.push(item);
+addItem() {
+    this.items.push(this.item);
 }
 ```
 
