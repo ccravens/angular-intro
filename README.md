@@ -1,44 +1,111 @@
-# Class 0 - Install Angular CLI and Create Project
+# Class 1 - Intro to Typescript and Angular Development
 
-### Project Requirements
-- Web-Based Graphical User Interface (Angular)
-- Communicate with Back-End Service
-- Authentication with Keycloak
-- Role-based Access Control
-- Authentication with Back-End Service (JWT)
+### Project Overview
+- Review Project Files
+- Review Package and Project Management
 
-### Install Latest Version of NodeJS
-https://nodejs.org/en/download/
-
-### Install / Upgrade Angular CLI
+### Files Created
 ```shell
-$ npm install -g @angular/cli@latest
+ track-my-shipment/.browserslistrc
+ track-my-shipment/.editorconfig
+ track-my-shipment/.gitignore
+ track-my-shipment/.vscode/extensions.json
+ track-my-shipment/.vscode/launch.json
+ track-my-shipment/.vscode/tasks.json
+ track-my-shipment/README.md
+ track-my-shipment/angular.json
+ track-my-shipment/karma.conf.js
+ track-my-shipment/package-lock.json
+ track-my-shipment/package.json
+ track-my-shipment/src/app/app-routing.module.ts
+ track-my-shipment/src/app/app.component.html
+ track-my-shipment/src/app/app.component.scss
+ track-my-shipment/src/app/app.component.spec.ts
+ track-my-shipment/src/app/app.component.ts
+ track-my-shipment/src/app/app.module.ts
+ track-my-shipment/src/assets/.gitkeep
+ track-my-shipment/src/environments/environment.prod.ts
+ track-my-shipment/src/environments/environment.ts
+ track-my-shipment/src/favicon.ico
+ track-my-shipment/src/index.html
+ track-my-shipment/src/main.ts
+ track-my-shipment/src/polyfills.ts
+ track-my-shipment/src/styles.scss
+ track-my-shipment/src/test.ts
+ track-my-shipment/tsconfig.app.json
+ track-my-shipment/tsconfig.json
 ```
 
-### Create New Project
+### Package and Project Management
 ```shell
-$ ng new track-my-shipment
+track-my-shipment/package.json
 ```
 
-### Add Angular Routing
+- scripts
+- dependencies
+- devDependencies
+
 ```shell
-? Would you like to add Angular routing? (y/N) y
+node_modules/
+package-lock.json
 ```
 
-### Add SCSS
+### Angular Project Configuration File
 ```shell
-? Which stylesheet format would you like to use? 
-  CSS 
-❯ SCSS   [ https://sass-lang.com/documentation/syntax#scss                ] 
-  Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ] 
-  Less   [ http://lesscss.org                                             ] 
+angular.json
 ```
 
-### Enter into Project Directory and Start Project
+### Typescript Configuration Files
 ```shell
-$ cd track-my-shipment/
-$ ng serve
+tsconfig.json
+tsconfig.app.json
 ```
 
-### Open Project
-http://localhost:4200
+### Review Project Source Files
+```shell
+src/
+```
+
+### Single Page App Foundation Files
+```shell
+src/index.html
+src/main.ts
+```
+
+### Project Files
+```shell
+src/app/
+```
+
+### Static Assets
+```shell
+src/assets/
+```
+
+### Environments
+```shell
+src/environments/
+```
+
+### Project Entrypoint and Bootstrapping
+```shell
+src/app/app.module.ts
+src/app/app.component.ts
+src/app/app.component.html
+src/app/app.component.html
+```
+
+### Project Routing
+```shell
+src/app/app-routing.module.ts
+```
+
+### Angular Testing Files
+```shell
+src/app/app.component.spec.ts
+```
+
+### Run Angular Test
+```shell
+$ ng test
+```
