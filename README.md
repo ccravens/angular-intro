@@ -1,71 +1,97 @@
-# Class 2 - Intro to Typescript
+# Class 3 - Routing, Components, Views and 2-Way Data Binding
 
 ### Class Overview
-- Discuss Why Typescript over Javascript
-- Visit the Typescript Playground
-- Create First Class
-- Visit Online Intro to Typescript Tutorial
+- Review The App Module, Component, HTML and SCSS files
+- Remove Default Landing Page Content
+- Create Login Component
+- Create Login Route
+- View New Page
+- Add Bootstrap Framework
 
-### Goodbye Javascript, Hello Typescript!
-- Typed Definitions
-- Autocomplete
-- Easy to Organize Code
-- Objects
-- Inheritance
-- Generics
-- etc...
-
-### Visit the Typescript Playground
-https://www.typescriptlang.org/play
-
-### Enter Typescript Code
-```typescript
-enum Gender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE',
-}
-
-class Person {
-    name: string;
-    age: number;
-    gender: Gender;
-
-    constructor(name: string, age: number, gender: Gender) {
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-    }
-
-    public sayHello() {
-        console.log('Hello!');
-    }
-
-    public askAge() {
-        console.log(`I am ${ this.age } years old!`);
-    }
-
-    public haveBirthday() {
-        this.age++;
-    }
-}
-
-const chad = new Person('Chad', 39, Gender.MALE);
-chad.sayHello();
-chad.askAge();
-chad.haveBirthday();
-chad.askAge();
+### Start Angular App
+```shell
+$ ng serve
 ```
 
-### Review Typescript Tutorial
-https://www.typescripttutorial.net/
+### Review Initial Module, Component and Routing
+```shell
+src/app/app.module.ts
+src/app/app-routing.module.ts
+src/app/app.component.ts
+src/app/app.component.html
+src/app/app.component.scss
+```
 
-### Discuss Typescript Constructs
-1. Getting Started
-2. Basic Types
-3. Control Flow Statements
-4. Functions
-5. Classes
-6. Interfaces
-7. Advanced Types
-8. Generics
-9. Modules
+### Edit Landing Page
+####FILES
+```shell
+src/app/app.component.html
+src/app/app.component.scss
+```
+####HTML
+```html
+<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
+    <a class="navbar-brand" href="#">Track My Shipment</a>
+    <ul class="nav navbar-nav ml-auto">
+        <li><a class="nav-link" href="#">Login</a></li>
+    </ul>
+</nav>
+
+<router-outlet></router-outlet>
+```
+
+### Create Login Component
+```shell
+$ ng generate component login
+```
+####Check Files Added
+```shell
+$ git status -u
+```
+
+### Create Login Route
+
+####FILE
+```shell
+src/app/app-routing.module.ts
+```
+####TYPESCRIPT
+```typescript
+const routes: Routes = [
+    {
+        path: 'login',
+        component: LoginComponent,
+    },
+];
+```
+
+####FILE
+```shell
+src/app/app.component.html
+```
+####HTML
+```html
+<a class="navbar-brand" routerLink="">Track My Shipment</a>
+```
+####HTML
+```html
+<li><a class="nav-link" routerLink="login">Login</a></li>
+```
+
+### Add Bootstrap
+####Legacy Peer Deps
+```shell
+.npmrc
+```
+```shell
+legacy-peer-deps=true
+```
+####Install Bootstrap
+```shell
+$ ng add @ng-bootstrap/ng-bootstrap
+```
+####Review Changes
+```shell
+package.json
+node_modules/bootstrap
+```
