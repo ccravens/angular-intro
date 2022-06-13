@@ -158,18 +158,76 @@ export class HttpInterceptorService {
 }
 ```
 
+### Create the Dev Environment
+
 ####FILE
 ```shell
-src/app/app.module.ts
+src/environments/environment.dev.ts
 ```
 
 ####TYPESCRIPT
 ```typescript
-  providers: [
+export const environment = {
+    production: false,
+    mock: true
+};
+```
+
+### Update the Prod Environment
+
+####FILE
+```shell
+src/environments/environment.prod.ts
+```
+
+####TYPESCRIPT
+```typescript
+export const environment = {
+    production: true,
+    mock: false
+};
+```
+
+### Enable the Dev Environment
+
+####FILE
+```shell
+angular.json
+```
+
+####TYPESCRIPT
+```typescript
+"fileReplacements": [
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpInterceptorService,
-      multi: true,
-    },
-  ],
+        "replace": "src/environments/environment.ts",
+        "with": "src/environments/environment.dev.ts"
+    }
+],
+```
+
+
+### Create the HTTP Interceptor Service
+```shell
+$ ng generate service services/http-interceptor
+```
+
+####FILE
+```shell
+src/app/services/http-interceptor.service.ts
+```
+
+####TYPESCRIPT
+```typescript
+if (environment.mock) {
+    return of(
+        new HttpResponse({
+            status: 200,
+            body: {
+                payload: { hello: 'world-mock' },
+            },
+        })
+    );
+} else {
+    return next.handle(request);
+}
 ```
