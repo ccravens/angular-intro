@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EndpointService } from '../../services/endpoint.service';
 
 @Component({
   selector: 'app-login',
@@ -9,9 +10,15 @@ export class LoginComponent implements OnInit {
   items: string[] = ['This', 'That', 'The Other'];
   item: string = '';
 
-  constructor() {}
+  constructor(private endpointService: EndpointService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.endpointService
+      .getHelloWorld()
+      .subscribe((value: { hello: string }) => {
+        console.log(value);
+      });
+  }
 
   addItem() {
     this.items.push(this.item);
