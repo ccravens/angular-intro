@@ -197,16 +197,24 @@ angular.json
 
 ####TYPESCRIPT
 ```typescript
-"fileReplacements": [
-    {
-        "replace": "src/environments/environment.ts",
-        "with": "src/environments/environment.dev.ts"
-    }
-],
+"development": {
+    "buildOptimizer": false,
+        "optimization": false,
+        "vendorChunk": true,
+        "extractLicenses": false,
+        "sourceMap": true,
+        "namedChunks": true,
+        "fileReplacements": [
+        {
+            "replace": "src/environments/environment.ts",
+            "with": "src/environments/environment.dev.ts"
+        }
+    ]
+}
 ```
 
 
-### Create the HTTP Interceptor Service
+### Update the HTTP Interceptor Service
 ```shell
 $ ng generate service services/http-interceptor
 ```
