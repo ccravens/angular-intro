@@ -1,212 +1,175 @@
-# Class 3 - Routing, Components, Views and 2-Way Data Binding
+# Class 4 - Services, HttpClient and HttpInterceptor
 
 ### Class Overview
-- Review The App Module, Component, HTML and SCSS files
-- Remove Default Landing Page Content
-- Create Login Component
-- Create Login Route
-- View New Page
-- Add Bootstrap Framework
+- Injectables and Services
+- Observables
+- HttpClient Library
+- HttpInterceptor
+- Implementing a Mocking System
 
 ### Start Angular App
 ```shell
 $ ng serve
 ```
 
-### Review Initial Module, Component and Routing
+### Create Endpoint Service
 ```shell
-src/app/app.module.ts
-src/app/app-routing.module.ts
-src/app/app.component.ts
-src/app/app.component.html
-src/app/app.component.scss
+$ ng generate service services/endpoint
 ```
 
-### Edit Landing Page
-####FILES
 ```shell
-src/app/app.component.html
-src/app/app.component.scss
-```
-####HTML
-```html
-<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
-    <a class="navbar-brand" href="#">Track My Shipment</a>
-    <ul class="nav navbar-nav ml-auto">
-        <li><a class="nav-link" href="#">Login</a></li>
-    </ul>
-</nav>
-
-<router-outlet></router-outlet>
+src/app/components/endpoint.service.ts
 ```
 
-### Create Login Component
-```shell
-$ ng generate component components/login
-```
-####Check Files Added
-```shell
-$ git status -u
-```
-
-### Create Login Route
-
+### Inject Endpoint Service into Login Component
 ####FILE
 ```shell
-src/app/app-routing.module.ts
+src/app/components/login/login.component.ts
 ```
 ####TYPESCRIPT
 ```typescript
-const routes: Routes = [
-    {
-        path: 'login',
-        component: LoginComponent,
-    },
-];
+constructor(private endpointService: EndpointService) {}
+```
+
+### Angular Component Lifecycle Hooks
+https://angular.io/guide/lifecycle-hooks
+
+- ngOnChanges()
+- ngOnInit()
+- ngDoCheck()
+- ngAfterContentInit()
+- ngAfterContentChecked()
+- ngAfterViewInit()
+- ngAfterViewChecked()
+- ngOnDestroy()
+
+### Creating Service
+####FILE
+```shell
+app/services/endoint.service.ts
+```
+####TYPESCRIPT
+```typescript
+generateNumbers(): Observable<number> {
+    return of(1, 2, 3);
+}
+```
+
+####Subscribe to Observable
+####FILE
+```shell
+src/app/components/login/login.component.ts
+```
+####HTML
+```typescript
+  ngOnInit(): void {
+    this.endpointService.generateNumbers().subscribe((value: number) => {
+      console.log(`>> GENERATED: ${value}`);
+    });
+  }
+```
+####CONSOLE OUTPUT
+```shell
+>> GENERATED: 1
+>> GENERATED: 2
+>> GENERATED: 3
+```
+
+### Create HTTP Client
+
+####Import HttpClientModule in the App Module
+```shell
+app/app.module.ts
+```
+```typescript
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    FormsModule,
+    HttpClientModule,
+],
 ```
 
 ####FILE
 ```shell
-src/app/app.component.html
+app/services/endoint.service.ts
 ```
-####HTML
-```html
-<a class="navbar-brand" routerLink="">Track My Shipment</a>
-```
-####HTML
-```html
-<li><a class="nav-link" routerLink="login">Login</a></li>
-```
-
-```shell
-Review differences between href (page reload by browser) and routerLink (no page reload).
-```
-
-### Add Bootstrap
-####Legacy Peer Deps
-```shell
-.npmrc
-```
-```shell
-legacy-peer-deps=true
-```
-####Install Bootstrap
-```shell
-$ ng add @ng-bootstrap/ng-bootstrap
-```
-####Review Changes
-```shell
-package.json
-node_modules/bootstrap
-```
-
-###2-Way Data Binding - Infamous TODO List
-####Create Items Model to Hold Items
-```shell
-src/app/components/login/login.component.ts
+####TYPESCRIPT
+```typescript
+constructor(private httpClient: HttpClient) {}
 ```
 ```typescript
-export class LoginComponent implements OnInit {
-    items: string[] = ['This', 'That', 'The Other'];
-
-    constructor() {}
-
-    ngOnInit(): void {}
+getHelloWorld(): Observable<{ hello: string }> {
+    return this.httpClient.get<{ hello: string }>(
+        'http://mockbin.org/bin/6c9dd375-2359-4fed-9702-3feb809138fb'
+    );
 }
 ```
 
-####Create Dynamic List
-```shell
-src/app/components/login/login.component.html
-```
-```html
-<ul>
-    <li *ngFor="let item of items">{{ item }}</li>
-</ul>
-```
 
-####Create Input Form and Button
-```shell
-src/app/components/login/login.component.html
-```
-```html
-<input type="text">
-<button>Add Item</button>
-```
+### Call HTTP Service
 
-####Create Model for New Item
+####FILE
 ```shell
 src/app/components/login/login.component.ts
 ```
+
+####TYPESCRIPT
 ```typescript
-export class LoginComponent implements OnInit {
-    items: string[] = ['This', 'That', 'The Other'];
-    item: string = '';
+ngOnInit(): void {
+    this.endpointService
+        .getHelloWorld()
+        .subscribe((value: { hello: string }) => {
+            console.log(value);
+        });
+}
 ```
 
-####Create Data Binding
+
+### Create the HTTP Interceptor Service
 ```shell
-src/app/components/login/login.component.html
-```
-```html
-<input type="text" [(ngModel)]="item">
+$ ng generate service services/http-interceptor
 ```
 
-####Add FormsModule to AppModule
+####FILE
+```shell
+src/app/services/http-interceptor.service.ts
+```
+
+####TYPESCRIPT
+```typescript
+export class HttpInterceptorService {
+    constructor() {}
+
+    intercept(
+        request: HttpRequest<any>,
+        next: HttpHandler
+    ): Observable<HttpEvent<any>> {
+        return of(
+            new HttpResponse({
+                status: 200,
+                body: {
+                    payload: { hello: 'world-mock' },
+                },
+            })
+        );
+    }
+}
+```
+
+####FILE
 ```shell
 src/app/app.module.ts
 ```
+
+####TYPESCRIPT
 ```typescript
-imports: [
-    BrowserModule,
-    AppRoutingModule,
-    NgbModule,
-    CommonModule,
-    FormsModule,
-]
-```
-
-####Create Add Item Event Handler
-```shell
-src/app/components/login/login.component.ts
-```
-```typescript
-addItem() {
-    this.items.push(this.item);
-}
-```
-
-####Add Click Event to Button
-```shell
-src/app/components/login/login.component.html
-```
-```html
-<button (click)="addItem()">Add Item</button>
-```
-
-###How Would We Remove Item?
-####Create Button
-```shell
-src/app/components/login/login.component.html
-```
-```html
-<button>Remove Item</button>
-```
-
-####Create Click Event Handler
-```shell
-src/app/components/login/login.component.ts
-```
-```typescript
-removeItem() {
-  this.items.pop();
-}
-```
-
-####Add Click Event to Button
-```shell
-src/app/components/login/login.component.html
-```
-```html
-<button (click)="removeItem()">Remove Item</button>
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true,
+    },
+  ],
 ```
