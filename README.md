@@ -1,83 +1,110 @@
-# Class 4 - Services, HttpClient and HttpInterceptor
+# Class 5 - Docker Compose and Keycloak
 
 ### Class Overview
-- Injectables and Services
-- Observables
-- HttpClient Library
-- HttpInterceptor
-- Implementing a Mocking System
+- Create Docker Compose File
+- Run Keycloak Service
+- Login to Keycloak Service
+- Configure Keycloak
+- Install Keycloak Angular Libraries
+- Configure Keycloak Angular Libraries
+- Create Auth Guard
+- Create Protected Dashboard Page
 
-### Start Angular App
-```shell
-$ ng serve
-```
-
-### Create Endpoint Service
-```shell
-$ ng generate service services/endpoint
-```
-
-```shell
-src/app/components/endpoint.service.ts
-```
-
-### Inject Endpoint Service into Login Component
+### Create Docker Compose File
 ####FILE
 ```shell
-src/app/components/login/login.component.ts
-```
-####TYPESCRIPT
-```typescript
-constructor(private endpointService: EndpointService) {}
+docker-compose.yml
 ```
 
-### Angular Component Lifecycle Hooks
-https://angular.io/guide/lifecycle-hooks
+```yaml
+version: '3.7'
+services:
+  postgres:
+    image: postgres:11.2-alpine
+    environment:
+      POSTGRES_DB: 'keycloak'
+      POSTGRES_USER: 'admin'
+      POSTGRES_PASSWORD: 'admin'
+      PGDATA: '/var/lib/postgresql/data/db_data'
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data/db_data
+    shm_size: '1024m'
+    networks:
+      - internal
 
-- ngOnChanges()
-- ngOnInit()
-- ngDoCheck()
-- ngAfterContentInit()
-- ngAfterContentChecked()
-- ngAfterViewInit()
-- ngAfterViewChecked()
-- ngOnDestroy()
+  keycloak:
+    image: jboss/keycloak:16.1.1
+    environment:
+      KEYCLOAK_USER: 'admin'
+      KEYCLOAK_PASSWORD: 'admin'
+      DB_VENDOR: 'postgres'
+      DB_ADDR: 'postgres'
+      DB_PORT: '5432'
+      DB_DATABASE: 'keycloak'
+      DB_USER: 'admin'
+      DB_PASSWORD: 'admin'
+    ports:
+      - '8080:8080'
+    networks:
+      - internal
 
-### Creating Service
+networks:
+  internal:
+    driver: bridge
+```
+
 ####FILE
 ```shell
-app/services/endoint.service.ts
+.gitignore
 ```
-####TYPESCRIPT
+
+```text
+data/
+```
+
+### Run Keycloak Service
+```shell
+docker-compose up
+```
+
+### Login to Keycloak Service
+http://localhost:8080
+
+```text
+username: admin
+password: admin
+```
+
+### Configure Keycloak
+https://wkrzywiec.medium.com/step-by-step-guide-how-integrate-keycloak-with-angular-application-d96b05f7dfdd
+
+### Install Keycloak Angular Libraries
+```shell
+$ npm install keycloak-angular keycloak-js
+```
+
+### Configure Keycloak Angular
+```shell
+$ ng generate class init/keycloak-init --type=factory --skip-tests
+```
+
 ```typescript
-generateNumbers(): Observable<number> {
-    return of(1, 2, 3);
+import { KeycloakService } from "keycloak-angular";
+
+export function initializeKeycloak(
+  keycloak: KeycloakService
+  ) {
+    return () =>
+      keycloak.init({
+        config: {
+          url: 'http://localhost:8080' + '/auth',
+          realm: 'test',
+          clientId: 'frontend',
+        }
+      });
 }
 ```
 
-####Subscribe to Observable
-####FILE
-```shell
-src/app/components/login/login.component.ts
-```
-####HTML
-```typescript
-  ngOnInit(): void {
-    this.endpointService.generateNumbers().subscribe((value: number) => {
-      console.log(`>> GENERATED: ${value}`);
-    });
-  }
-```
-####CONSOLE OUTPUT
-```shell
->> GENERATED: 1
->> GENERATED: 2
->> GENERATED: 3
-```
-
-### Create HTTP Client
-
-####Import HttpClientModule in the App Module
 ```shell
 app/app.module.ts
 ```
@@ -88,170 +115,100 @@ app/app.module.ts
     NgbModule,
     FormsModule,
     HttpClientModule,
-],
+    KeycloakAngularModule,
+  ],
 ```
-
-####FILE
-```shell
-app/services/endoint.service.ts
-```
-####TYPESCRIPT
-```typescript
-constructor(private httpClient: HttpClient) {}
-```
-```typescript
-getHelloWorld(): Observable<{ hello: string }> {
-    return this.httpClient.get<{ hello: string }>(
-        'http://mockbin.org/bin/6c9dd375-2359-4fed-9702-3feb809138fb'
-    );
-}
-```
-
-
-### Call HTTP Service
-
-####FILE
-```shell
-src/app/components/login/login.component.ts
-```
-
-####TYPESCRIPT
-```typescript
-ngOnInit(): void {
-    this.endpointService
-        .getHelloWorld()
-        .subscribe((value: { hello: string }) => {
-            console.log(value);
-        });
-}
-```
-
-
-### Create the HTTP Interceptor Service
-```shell
-$ ng generate service services/http-interceptor
-```
-
-####FILE
-```shell
-src/app/services/http-interceptor.service.ts
-```
-
-####TYPESCRIPT
-```typescript
-export class HttpInterceptorService {
-    constructor() {}
-
-    intercept(
-        request: HttpRequest<any>,
-        next: HttpHandler
-    ): Observable<HttpEvent<any>> {
-        return of(
-            new HttpResponse({
-                status: 200,
-                body: {
-                    payload: { hello: 'world-mock' },
-                },
-            })
-        );
-    }
-}
-```
-
-####FILE
-```shell
-src/app/app.module.ts
-```
-
-####TYPESCRIPT
 ```typescript
   providers: [
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpInterceptorService,
-      multi: true,
+        provide: HTTP_INTERCEPTORS,
+        useClass: HttpInterceptorService,
+        multi: true,
     },
-  ],
+    {
+        provide: APP_INITIALIZER,
+        useFactory: initializeKeycloak,
+        multi: true,
+        deps: [KeycloakService],
+    },
+],
 ```
 
-### Create the Dev Environment
-
-####FILE
+### Create Auth Guard
 ```shell
-src/environments/environment.dev.ts
+$ ng generate guard guard/auth
 ```
 
-####TYPESCRIPT
-```typescript
-export const environment = {
-    production: false,
-    mock: true
-};
-```
-
-### Update the Prod Environment
-
-####FILE
+#### Select CanActivate
 ```shell
-src/environments/environment.prod.ts
+? Which interfaces would you like to implement? (Press <space> to select, <a> to toggle all, <i>
+ to invert selection, and <enter> to proceed)
+❯◉ CanActivate
+ ◯ CanActivateChild
+ ◯ CanDeactivate
+ ◯ CanLoad
 ```
-
-####TYPESCRIPT
 ```typescript
-export const environment = {
-    production: true,
-    mock: false
-};
-```
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
-### Enable the Dev Environment
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthGuard extends KeycloakAuthGuard {
+  
+  constructor(
+    protected readonly router: Router,
+    protected readonly keycloak: KeycloakService
+  ) {
+    super(router, keycloak);
+  }
+  
+  async isAccessAllowed(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Promise<boolean | UrlTree> {
+    
+    if (!this.authenticated) {
+      await this.keycloak.login({
+        redirectUri: window.location.origin + state.url,
+      });
+    }
 
-####FILE
-```shell
-angular.json
-```
-
-####TYPESCRIPT
-```typescript
-"development": {
-    "buildOptimizer": false,
-        "optimization": false,
-        "vendorChunk": true,
-        "extractLicenses": false,
-        "sourceMap": true,
-        "namedChunks": true,
-        "fileReplacements": [
-        {
-            "replace": "src/environments/environment.ts",
-            "with": "src/environments/environment.dev.ts"
-        }
-    ]
+    return this.authenticated;
+  }
 }
 ```
 
-
-### Update the HTTP Interceptor Service
+### Create Protected Dashboard Page
 ```shell
-$ ng generate service services/http-interceptor
+$ ng generate component components/dashboard
 ```
 
-####FILE
-```shell
-src/app/services/http-interceptor.service.ts
-```
-
-####TYPESCRIPT
+### Add Dashboard Route
 ```typescript
-if (environment.mock) {
-    return of(
-        new HttpResponse({
-            status: 200,
-            body: {
-                payload: { hello: 'world-mock' },
-            },
-        })
-    );
-} else {
-    return next.handle(request);
-}
+const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+  },
+];
+```
+
+
+### Add Dashboard Link
+```shell
+src/app/app.component.html
+```
+
+```html
+  <ul class="nav navbar-nav ml-auto">
+    <li><a class="nav-link" routerLink="dashboard">Dashboard</a></li>
+    <li><a class="nav-link" routerLink="login">Login</a></li>
+  </ul>
 ```
