@@ -158,6 +158,22 @@ export class HttpInterceptorService {
 }
 ```
 
+####FILE
+```shell
+src/app/app.module.ts
+```
+
+####TYPESCRIPT
+```typescript
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true,
+    },
+  ],
+```
+
 ### Create the Dev Environment
 
 ####FILE
